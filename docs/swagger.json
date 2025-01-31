@@ -1,0 +1,104 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Transferências",
+    "description": "API para transferências de dinheiro entre usuários",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/balance": {
+      "get": {
+        "summary": "Consulta saldo de um usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saldo do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "balance": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID de usuário inválido"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/transfer": {
+      "post": {
+        "summary": "Realiza uma transferência entre usuários",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from_id": {
+                    "type": "integer",
+                    "description": "ID do usuário de origem"
+                  },
+                  "to_id": {
+                    "type": "integer",
+                    "description": "ID do usuário de destino"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Valor a ser transferido"
+                  }
+                },
+                "required": ["from_id", "to_id", "amount"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transferência realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro na transferência (saldo insuficiente, valor inválido, etc)"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    }
+  }
+} 
